@@ -54,7 +54,7 @@ body{background:#000;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",
 </main><footer class="footer"><span>© <span id="year"></span> Jumpers · José Bayona</span><span>Claridad. Acción. Expansión.</span><button class="text-btn" id="privacy-link">Sobre tus datos</button></footer></div>
 <script>
 /* Set leadEndpoint only after deploying and testing backend/Code.gs. No secrets belong here. */
-const CONFIG = { leadEndpoint: '', youtube: '', skool: '', booking: '', whatsapp: '' };
+const CONFIG = { leadEndpoint: 'https://script.google.com/macros/s/AKfycbwG9e8kDKeJSyA8VGCNxjKzmxiOjuBDErPfaTO2M-VjNn7fAAD7z0Sf9-FaZdGhRiYy9A/exec', youtube: '', skool: '', booking: '', whatsapp: '' };
 const $=s=>document.querySelector(s);const $$=s=>[...document.querySelectorAll(s)];
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const state={step:0,answers:{},view:'landing',previous:'landing',result:null,leadId:null};
