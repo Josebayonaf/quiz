@@ -15,7 +15,7 @@ Sitio estático para `https://quiz.josebayonaf.com`, publicado desde `main / (ro
 
 Coaches, mentores, consultores y profesionales de servicios que tienen experiencia, pero necesitan concretar una oferta, actuar con constancia o convertir interés en un proceso comercial. Se distingue etapa (idea/oferta/ventas/recurrente), conducta observable y dificultad percibida. No se atribuye automáticamente todo a autosabotaje; el cuestionario no diagnostica personalidad ni salud mental.
 
-La entrada entrega valor sin pedir contacto. La solicitud de ayuda viene después del resultado: etapa + objetivo + dificultad + tipo de acompañamiento + momento de inicio. No se utiliza capacidad económica para alterar la prioridad. La hipótesis es mejorar el contexto y pertinencia de las conversaciones; todavía no hay datos para afirmar una mejora de conversión.
+Con el endpoint activo, la entrada guarda nombre, correo y WhatsApp con consentimiento antes del quiz. Actualiza la misma fila al diagnosticar y calificar. La solicitud de ayuda viene después del resultado: etapa + objetivo + dificultad + tipo de acompañamiento + momento de inicio. No se utiliza capacidad económica para alterar la prioridad. La hipótesis es mejorar el contexto y pertinencia de las conversaciones; todavía no hay datos para afirmar una mejora de conversión.
 
 ### Reglas de prioridad (orden importa)
 
@@ -34,13 +34,13 @@ La selección subjetiva se contrasta con las demás respuestas. La interfaz expl
 ## Activar captación privada en Google Sheets
 
 1. En `https://script.google.com`, crea un proyecto bajo tu cuenta de Google.
-2. Copia `backend/Code.gs` en el editor. Ejecuta `setup` y autoriza el acceso solicitado. Esta función crea una hoja privada y conserva su ID en propiedades del script. El enlace aparece en el registro de ejecución.
+2. Copia `backend/Code.gs` en el editor. Ejecuta `setup` y autoriza el acceso solicitado. Antes de ejecutar, configura SHEET_ID en las propiedades del script con el ID del archivo PROSPECTOS autorizado. setup verifica la tabla existente; no crea ni reemplaza hojas. El enlace aparece en el registro de ejecución.
 3. **Implementar → Nueva implementación → Aplicación web.** Ejecutar como tú; acceso para cualquier persona (incluidas personas sin sesión). Publicar el endpoint no publica la hoja: `doGet` solo devuelve estado y `doPost` solo recibe solicitudes. No compartas públicamente el spreadsheet.
 4. Copia la URL de implementación que termina en `/exec`, nunca la URL `/dev`.
 5. Sustituye el valor vacío de `CONFIG.leadEndpoint` en `index.html` por esa URL. No añadas tokens, credenciales ni claves privadas al repositorio.
 6. En la web publicada por HTTPS, realiza una solicitud de prueba con datos de prueba. Comprueba que aparezca una sola fila en Sheets y que la interfaz confirme el mismo ID. Repite tras un fallo o timeout para probar deduplicación. Elimina esa fila de prueba al terminar.
 7. Si CORS, autorizaciones o políticas de Workspace impiden leer la respuesta, no uses `no-cors` ni muestres éxito falso. Mantén la captura desactivada hasta resolverlo. La web permite copiar el contexto si no puede confirmar el envío.
-8. Revisa el texto de datos y el canal para solicitudes de privacidad antes de invitar a prospectos. El consentimiento se limita a revisar y responder al caso; no suscribe a campañas.
+8. Revisa el texto de datos y el canal para solicitudes de privacidad antes de invitar a prospectos. El consentimiento permite seguimiento del diagnóstico y ofertas de recursos, comunidad o mentoría por correo y WhatsApp; permite revocación.
 
 El backend valida contacto, consentimiento, tamaño, prioridad y origen declarado, neutraliza fórmulas de Sheets, incluye honeypot, bloqueo de escritura y deduplicación por ID. El origen declarado y el honeypot no son controles fuertes contra bots. Para tráfico de campañas a escala, añade protección verificada en servidor y observa cuotas. No se envían correos automáticos ni avisos al equipo en esta versión.
 
@@ -62,3 +62,8 @@ Esta versión no instala trackers. Tras activar la captación se podrán contar 
 ## Pruebas
 
 `tests/smoke.cjs` usa Playwright instalado en el runtime. Iniciar servidor local en puerto 8080 y ejecutar el archivo. Comprueba rutas, navegación, accesibilidad básica, descarga, resumen, validación, envío simulado y fallo. La prueba de envío real a Google queda pendiente de la autorización y despliegue de Apps Script.
+
+## Calificación comercial v2
+Después de entregar el plan se pregunta intención, fecha de inicio, tiempo para implementar e inversión. Mentoría requiere apoyo personal, inicio en 30 días, tiempo y considerar USD 4.500. Skool requiere interés en acompañamiento, tiempo, inversión en membresía o mentoría y no estar explorando. Resto: YouTube. La prioridad del diagnóstico no cambia por presupuesto.
+
+Configurar CONFIG.youtube, skool, booking y whatsapp con enlaces confirmados. Por ahora están vacíos. Captura desactivada hasta desplegar y probar leadEndpoint. La tabla admite 999 prospectos con fórmulas; ampliar antes de superar ese límite. El backend conserva las columnas de seguimiento manual y la fórmula de ruta.
