@@ -1,53 +1,39 @@
-/** Jumpers · private lead intake. Deploy as Apps Script web app only after running setup(). */
-const HEADERS = ['Fecha','ID','Nombre','Correo','WhatsApp','Servicio','Etapa','Oferta','Invitaciones 30d','Conversaciones 30d','Canal','Proceso','Capacidad','Validación','Barrera','Dificultad percibida','Objetivo','Prioridad sugerida','Provisional','Ayuda buscada','Cuándo','Contexto','Resumen para setting','Consentimiento','Versión consentimiento','Origen','Estado','Responsable','Próxima acción','Fecha próxima acción','Último contacto','Notas'];
-function setup() {
-  const props = PropertiesService.getScriptProperties();
-  let id = props.getProperty('SHEET_ID');
-  const book = id ? SpreadsheetApp.openById(id) : SpreadsheetApp.create('Jumpers · Prospectos del diagnóstico');
-  if (!id) props.setProperty('SHEET_ID', book.getId());
-  const sheet = book.getSheetByName('Prospectos') || book.getSheets()[0].setName('Prospectos');
-  if (sheet.getLastRow() === 0) sheet.appendRow(HEADERS);
-  sheet.setFrozenRows(1);
-  sheet.getRange(1,1,1,HEADERS.length).setBackground('#12382c').setFontColor('#ffffff').setFontWeight('bold');
-  sheet.setColumnWidths(1,HEADERS.length,160);
-  sheet.setColumnWidth(23,460);
-  console.log('Hoja privada creada o recuperada: ' + book.getUrl());
-}
-function safeCell(value, max) {
-  let text = String(value == null ? '' : value).slice(0, max || 1500);
-  // Avoid formulas when writing visitor-controlled text to Sheets.
-  if (/^[\s]*[=+@\-]/.test(text)) text = "'" + text;
-  return text;
-}
-function json(value) { return ContentService.createTextOutput(JSON.stringify(value)).setMimeType(ContentService.MimeType.JSON); }
-function doGet() { return json({ok:true,service:'Jumpers intake',version:'1.0'}); }
-function doPost(e) {
-  let lock;
-  try {
-    if (!e || !e.postData || e.postData.contents.length > 18000) return json({ok:false,error:'invalid_request'});
-    const p = JSON.parse(e.postData.contents);
-    if (p.website || p.consent !== true || p.consentVersion !== '2026-09-22') return json({ok:false,error:'invalid_consent'});
-    if (!/^[a-f0-9-]{36}$/i.test(p.id || '') || typeof p.name !== 'string' || !p.name.trim() || p.name.length>100 || typeof p.email !== 'string' || p.email.length>150 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(p.email)) return json({ok:false,error:'invalid_contact'});
-    if (p.source !== 'https://quiz.josebayonaf.com') return json({ok:false,error:'invalid_source'});
-    if (!['oferta','ejecucion','captacion','conversion','organizacion'].includes(p.priority)) return json({ok:false,error:'invalid_priority'});
-    const a = p.answers;
-    if (!a || typeof a !== 'object' || !a.stage || !a.goal || !p.support || !p.timing) return json({ok:false,error:'invalid_context'});
-    const id = PropertiesService.getScriptProperties().getProperty('SHEET_ID');
-    if (!id) return json({ok:false,error:'not_configured'});
-    lock = LockService.getScriptLock();
-    if (!lock.tryLock(10000)) return json({ok:false,error:'busy'});
-    const sheet = SpreadsheetApp.openById(id).getSheetByName('Prospectos');
-    if (!sheet) return json({ok:false,error:'not_configured'});
-    // Retry is safe: one submission ID produces one row, even after client timeouts.
-    if (sheet.getLastRow()>1 && sheet.getRange(2,2,sheet.getLastRow()-1,1).createTextFinder(p.id).matchEntireCell(true).findNext()) return json({ok:true,id:p.id});
-    const cache = CacheService.getScriptCache();
-    const key = 'email:' + Utilities.base64EncodeWebSafe(Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256,p.email.toLowerCase()));
-    if (cache.get(key)) return json({ok:false,error:'try_later'});
-    const row = [new Date(),p.id,p.name.trim(),p.email.trim(),p.phone,a.service,a.stage,a.clarity,a.execution,a.leads,a.channel,a.process,a.capacity,a.validation,a.barrier,a.perceived,a.goal,p.priority,p.provisional?'Sí':'No',p.support,p.timing,p.context,p.summary,'Sí',p.consentVersion,p.source,'Nuevo','','Revisar diagnóstico y contactar por el medio autorizado','','',''];
-    sheet.appendRow(row.map((v,i)=>i===0?v:safeCell(v,i===22?6000:1500)));
-    SpreadsheetApp.flush();
-    cache.put(key,'1',60);
-    return json({ok:true,id:p.id});
-  } catch (err) { return json({ok:false,error:'unable_to_save'}); }
-  finally { if (lock && lock.hasLock()) lock.releaseLock(); }
-}
+/** Set SHEET_ID in Apps Script properties to the authorized PROSPECTOS spreadsheet. */
+function setup(){const id=PropertiesService.getScriptProperties().getProperty('SHEET_ID');if(!id)throw Error('Set SHEET_ID first');const sheet=SpreadsheetApp.openById(id).getSheetByName('Prospectos');if(!sheet||sheet.getRange('A1').getValue()!=='ID prospecto')throw Error('Unexpected schema');}
+function safeCell(v,max){const t=String(v==null?'':v).slice(0,max||1500);return /^[\s]*[=+@\-]/.test(t)?"'"+t:t;}
+function json(v){return ContentService.createTextOutput(JSON.stringify(v)).setMimeType(ContentService.MimeType.JSON);}
+function doGet(){return json({ok:true,service:'Jumpers intake',version:'2.0'});}
+function doPost(e){let lock;try{
+ if(!e?.postData||e.postData.contents.length>18000)return json({ok:false,error:'invalid_request'});
+ const p=JSON.parse(e.postData.contents);
+ if(p.website||p.consent!==true||p.consentVersion!=='2026-09-23-v3')return json({ok:false,error:'invalid_consent'});
+ if(!/^[a-f0-9-]{36}$/i.test(p.id||'')||typeof p.name!=='string'||!p.name.trim()||p.name.length>100||typeof p.email!=='string'||p.email.length>150||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(p.email)||!/^\+[0-9 ()-]{8,22}$/.test(p.phone||''))return json({ok:false,error:'invalid_contact'});
+ if(!/^[A-Z]{2}$/.test(p.country||'')||!/^\+\d{1,3}$/.test(p.dialCode||'')||!p.phone.startsWith(p.dialCode))return json({ok:false,error:'invalid_country'});
+ if(p.source!=='https://quiz.josebayonaf.com'||!['contact','diagnosed','qualified'].includes(p.event))return json({ok:false,error:'invalid_source'});
+ const a=p.answers||{},q=p.qualification||{};
+ if(p.event!=='contact'&&!['oferta','ejecucion','captacion','conversion','organizacion'].includes(p.priority))return json({ok:false,error:'invalid_priority'});
+ if(p.event==='qualified'&&(!['learn','community','personal'].includes(q.intent)||!['now','later','explore'].includes(q.timing)||!['yes','no'].includes(q.commitment)||!['free','community','ready','unsure'].includes(q.investment)))return json({ok:false,error:'invalid_qualification'});
+ const id=PropertiesService.getScriptProperties().getProperty('SHEET_ID');if(!id)return json({ok:false,error:'not_configured'});
+ lock=LockService.getScriptLock();if(!lock.tryLock(10000))return json({ok:false,error:'busy'});
+ const sheet=SpreadsheetApp.openById(id).getSheetByName('Prospectos');if(!sheet||sheet.getRange('A1').getValue()!=='ID prospecto')return json({ok:false,error:'schema'});
+ const ids=sheet.getRange(2,1,999,1).getValues().flat();let row=ids.indexOf(p.id)+2;const existing=row>=2;
+ if(!existing){if(p.event!=='contact')return json({ok:false,error:'contact_required'});const blank=ids.findIndex(v=>!v);if(blank<0)return json({ok:false,error:'capacity'});row=blank+2;
+ sheet.getRange(row,1,1,5).setValues([[p.id,new Date(),safeCell(p.name),safeCell(p.email),safeCell(p.phone)]]);
+ sheet.getRange(row,29).setValue(safeCell(JSON.stringify({contact:{country:p.country,countryName:p.countryName,dialCode:p.dialCode}}),6000));
+ sheet.getRange(row,15,1,6).setValues([['Contacto captado','Sí',new Date(),p.consentVersion,p.source,'Nuevo']]);
+ }else{if(sheet.getRange(row,4).getValue()!==safeCell(p.email)||sheet.getRange(row,5).getValue()!==safeCell(p.phone))return json({ok:false,error:'contact_mismatch'});if(sheet.getRange(row,16).getValue()!=='Sí')return json({ok:false,error:'consent_revoked'});}
+ if(p.event!=='contact'){
+ const service={coach:'Coaching o mentoría',consult:'Consultoría',therapy:'Terapia o acompañamiento',professional:'Otro servicio profesional'};
+ const stage={idea:'Definiendo oferta',offer:'Oferta sin ventas',sales:'Ventas iniciales',steady:'Ventas recurrentes'};
+ const priority={oferta:'Oferta',ejecucion:'Ejecución',captacion:'Captación',conversion:'Conversión',organizacion:'Organización'};
+ const goals={validate:'Poner a prueba una oferta clara',launch:'Ofrecer con constancia',leads:'Más conversaciones pertinentes',sales:'Mejorar propuestas y seguimiento',order:'Ordenar un proceso sostenible'};
+ sheet.getRange(row,6,1,4).setValues([[service[a.service]||'',stage[a.stage]||'',goals[a.goal]||'',priority[p.priority]]]);
+ sheet.getRange(row,29).setValue(safeCell(JSON.stringify({contact:{country:p.country,countryName:p.countryName,dialCode:p.dialCode},answers:a}),6000));
+ if(sheet.getRange(row,15).getValue()!=='Calificación completa')sheet.getRange(row,15).setValue('Diagnóstico completo');
+ }
+ if(p.event==='qualified'){
+ sheet.getRange(row,10,1,4).setValues([[{learn:'Aprender gratis',community:'Comunidad',personal:'Mentoría personal'}[q.intent],{now:'Próximos 30 días',later:'Más adelante',explore:'Explorando'}[q.timing],q.commitment==='yes'?'Sí':'No',{free:'Gratis',community:'Membresía',ready:'Considera USD 4.500',unsure:'Por definir'}[q.investment]]]);
+ sheet.getRange(row,15).setValue('Calificación completa');
+ }
+ SpreadsheetApp.flush();return json({ok:true,id:p.id});
+ }catch(err){return json({ok:false,error:'unable_to_save'});}finally{if(lock?.hasLock())lock.releaseLock();}}
