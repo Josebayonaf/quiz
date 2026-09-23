@@ -6,8 +6,9 @@ function doGet(){return json({ok:true,service:'Jumpers intake',version:'2.0'});}
 function doPost(e){let lock;try{
  if(!e?.postData||e.postData.contents.length>18000)return json({ok:false,error:'invalid_request'});
  const p=JSON.parse(e.postData.contents);
- if(p.website||p.consent!==true||p.consentVersion!=='2026-09-22-v2')return json({ok:false,error:'invalid_consent'});
+ if(p.website||p.consent!==true||p.consentVersion!=='2026-09-23-v3')return json({ok:false,error:'invalid_consent'});
  if(!/^[a-f0-9-]{36}$/i.test(p.id||'')||typeof p.name!=='string'||!p.name.trim()||p.name.length>100||typeof p.email!=='string'||p.email.length>150||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(p.email)||!/^\+[0-9 ()-]{8,22}$/.test(p.phone||''))return json({ok:false,error:'invalid_contact'});
+ if(!/^[A-Z]{2}$/.test(p.country||'')||!/^\+\d{1,3}$/.test(p.dialCode||'')||!p.phone.startsWith(p.dialCode))return json({ok:false,error:'invalid_country'});
  if(p.source!=='https://quiz.josebayonaf.com'||!['contact','diagnosed','qualified'].includes(p.event))return json({ok:false,error:'invalid_source'});
  const a=p.answers||{},q=p.qualification||{};
  if(p.event!=='contact'&&!['oferta','ejecucion','captacion','conversion','organizacion'].includes(p.priority))return json({ok:false,error:'invalid_priority'});
@@ -18,6 +19,7 @@ function doPost(e){let lock;try{
  const ids=sheet.getRange(2,1,999,1).getValues().flat();let row=ids.indexOf(p.id)+2;const existing=row>=2;
  if(!existing){if(p.event!=='contact')return json({ok:false,error:'contact_required'});const blank=ids.findIndex(v=>!v);if(blank<0)return json({ok:false,error:'capacity'});row=blank+2;
  sheet.getRange(row,1,1,5).setValues([[p.id,new Date(),safeCell(p.name),safeCell(p.email),safeCell(p.phone)]]);
+ sheet.getRange(row,29).setValue(safeCell(JSON.stringify({contact:{country:p.country,countryName:p.countryName,dialCode:p.dialCode}}),6000));
  sheet.getRange(row,15,1,6).setValues([['Contacto captado','Sí',new Date(),p.consentVersion,p.source,'Nuevo']]);
  }else{if(sheet.getRange(row,4).getValue()!==safeCell(p.email)||sheet.getRange(row,5).getValue()!==safeCell(p.phone))return json({ok:false,error:'contact_mismatch'});if(sheet.getRange(row,16).getValue()!=='Sí')return json({ok:false,error:'consent_revoked'});}
  if(p.event!=='contact'){
@@ -26,7 +28,7 @@ function doPost(e){let lock;try{
  const priority={oferta:'Oferta',ejecucion:'Ejecución',captacion:'Captación',conversion:'Conversión',organizacion:'Organización'};
  const goals={validate:'Poner a prueba una oferta clara',launch:'Ofrecer con constancia',leads:'Más conversaciones pertinentes',sales:'Mejorar propuestas y seguimiento',order:'Ordenar un proceso sostenible'};
  sheet.getRange(row,6,1,4).setValues([[service[a.service]||'',stage[a.stage]||'',goals[a.goal]||'',priority[p.priority]]]);
- sheet.getRange(row,29).setValue(safeCell(JSON.stringify(a),6000));
+ sheet.getRange(row,29).setValue(safeCell(JSON.stringify({contact:{country:p.country,countryName:p.countryName,dialCode:p.dialCode},answers:a}),6000));
  if(sheet.getRange(row,15).getValue()!=='Calificación completa')sheet.getRange(row,15).setValue('Diagnóstico completo');
  }
  if(p.event==='qualified'){
