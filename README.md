@@ -67,3 +67,8 @@ Esta versión no instala trackers. Tras activar la captación se podrán contar 
 Después de entregar el plan se pregunta intención, fecha de inicio, tiempo para implementar e inversión. Mentoría requiere apoyo personal, inicio en 30 días, tiempo y considerar USD 4.500. Skool requiere interés en acompañamiento, tiempo, inversión en membresía o mentoría y no estar explorando. Resto: YouTube. La prioridad del diagnóstico no cambia por presupuesto.
 
 Configurar CONFIG.youtube, skool, booking y whatsapp con enlaces confirmados. Por ahora están vacíos. Captura desactivada hasta desplegar y probar leadEndpoint. La tabla admite 999 prospectos con fórmulas; ampliar antes de superar ese límite. El backend conserva las columnas de seguimiento manual y la fórmula de ruta.
+
+## Registro obligatorio v3
+Antes de las preguntas: nombre, país del teléfono, número nacional con indicativo automático, correo y consentimiento explícito sin preseleccionar. Lista de 244 países/territorios de intl-tel-input; atribución en THIRD_PARTY_NOTICES.txt. Valida formato internacional básico (no verifica titularidad ni actividad de WhatsApp). El país y prefijo se conservan en el contexto JSON de la columna Respuestas del quiz junto con las respuestas, incluso en el registro inicial.
+
+Sin endpoint, la web publicada bloquea el inicio. Al abrir el HTML localmente (file:), permite probar con datos ficticios, avisa que no guarda y nunca confirma envío. El registro real avanza únicamente tras respuesta positiva del servidor. Versión de consentimiento: 2026-09-23-v3.
