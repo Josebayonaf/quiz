@@ -123,17 +123,15 @@ $('#back').onclick=()=>{if(state.step===0){show('landing')}else{state.step--;ren
 $('#start').onclick=start;$$('[data-start]').forEach(b=>b.onclick=start);$('#brand').onclick=e=>{e.preventDefault();show('landing')};$('#year').textContent=new Date().getFullYear();
 function maturity(a){return a.stage==='steady'&&a.clarity==='clear'?'expansion':(['sales','steady'].includes(a.stage)?'implementacion':'inicio');}
 function qualify(a){
- const hasBudget=['under500','500to1000','1000to2000','2000to4500','4500to5000','5000plus'].includes(a.budget);
- const prepared=a.clarity==='clear'&&['sales','steady'].includes(a.stage);
- if(!prepared||!hasBudget||a.intent==='learn'||a.commitment!=='yes'||a.timing==='explore')return 'youtube';
- if(['sales','steady'].includes(a.stage)&&a.pricing==='charging'&&a.intent==='personal'&&a.timing==='now'&&['4500to5000','5000plus'].includes(a.budget))return 'mentoria';
- return 'skool';
+ if(['2000to4500','4500to5000','5000plus'].includes(a.budget))return 'mentoria';
+ if(['500to1000','1000to2000'].includes(a.budget))return 'skool';
+ return 'youtube';
 }
 function qualificationPayload(a){return {intent:a.intent,timing:a.timing,commitment:a.commitment,investment:['4500to5000','5000plus'].includes(a.budget)?'ready':a.budget==='none'?'free':a.budget==='unsure'?'unsure':'community',budget:a.budget,level:maturity(a)};}
 const ROUTES={
  youtube:{title:'Empieza con claridad y recursos gratuitos.',text:'Tu siguiente paso es avanzar a tu ritmo, poner a prueba lo que ofreces y aplicar el plan. Usa el contenido gratuito de José como apoyo para la acción de esta semana.',label:'Aprendizaje gratuito'},
- skool:{title:'Da el siguiente paso en comunidad.',text:'Ya tienes una dirección y buscas apoyo para implementar. La comunidad de Skool es el siguiente espacio para trabajar tu oferta, contenido y ventas con acompañamiento.',label:'Implementación en comunidad'},
- mentoria:{title:'Revisemos tu negocio, uno a uno.',text:'Tienes una oferta en marcha, intención de actuar y disponibilidad para acompañamiento personal. Agenda una sesión estratégica gratuita de 30 minutos con José para revisar tu negocio, aclarar tu siguiente paso y valorar si la mentoría encaja contigo. La mentoría tiene una inversión de USD 4.500; la sesión no tiene costo ni compromiso de compra.',label:'Sesión estratégica con José'}
+ skool:{title:'Da el siguiente paso en comunidad.',text:'En Jumpers Club puedes trabajar tu oferta, contenido y ventas con apoyo de la comunidad. Conoce cómo funciona Skool y elige por dónde empezar según tu plan.',label:'Implementación en comunidad'},
+ mentoria:{title:'Revisemos tu negocio, uno a uno.',text:'Agenda una sesión estratégica gratuita de 30 minutos con José para revisar tu situación, identificar el apoyo que necesitas y valorar si la mentoría encaja contigo. La mentoría tiene una inversión de USD 4.500; la sesión no tiene costo ni compromiso de compra.',label:'Sesión estratégica con José'}
 };
 function destination(url,label){try{const u=new URL(url);if(u.protocol!=='https:')return '';return `<a class="btn" href="${esc(u.href)}" target="_blank" rel="noopener noreferrer">${label} ↗</a>`}catch{return ''}}
 function routeLinks(route){if(route==='youtube')return [{url:CONFIG.youtube,label:'Ver el contenido gratuito en YouTube'}];if(route==='skool')return [{url:CONFIG.skool,label:'Conocer la comunidad en Skool'}];return [{url:CONFIG.booking,label:'Agendar mi sesión gratuita de 30 minutos'},{url:CONFIG.whatsapp,label:'Coordinar mi sesión por WhatsApp'}];}
