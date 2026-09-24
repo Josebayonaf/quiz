@@ -12,7 +12,7 @@ El registro recoge nombre, país, teléfono con indicativo y correo. El quiz inc
 - Skool: oferta clara, ventas, presupuesto y disposición para implementar, sin reunir todos los criterios de mentoría.
 - Sesión gratuita de 30 minutos: ventas, oferta clara, precio que ya cobra, acompañamiento personal, inicio inmediato, tiempo disponible y presupuesto desde USD 4.500.
 
-El presupuesto por sí solo no determina la ruta. La recomendación no garantiza resultados ni obliga a comprar. Los enlaces se configuran en `CONFIG` en `index.html`. WhatsApp espera confirmación del indicativo internacional.
+El presupuesto por sí solo no determina la ruta. La recomendación no garantiza resultados ni obliga a comprar. Los enlaces se configuran en `CONFIG` en `index.html`. WhatsApp está configurado para la ruta de sesión estratégica con el indicativo confirmado por el titular.
 
 ## PDF
 
