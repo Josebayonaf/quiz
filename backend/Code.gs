@@ -41,9 +41,7 @@ function doPost(e){let lock;try{
  }catch(err){return json({ok:false,error:'unable_to_save'});}finally{if(lock?.hasLock())lock.releaseLock();}}
 
 function qualifyAnswers(a){
- const hasBudget=['under500','500to1000','1000to2000','2000to4500','4500to5000','5000plus'].includes(a.budget);
- const prepared=a.clarity==='clear'&&['sales','steady'].includes(a.stage);
- if(!prepared||!hasBudget||a.intent==='learn'||a.commitment!=='yes'||a.timing==='explore')return 'youtube';
- if(['sales','steady'].includes(a.stage)&&a.pricing==='charging'&&a.intent==='personal'&&a.timing==='now'&&['4500to5000','5000plus'].includes(a.budget))return 'mentoria';
- return 'skool';
+ if(['2000to4500','4500to5000','5000plus'].includes(a.budget))return 'mentoria';
+ if(['500to1000','1000to2000'].includes(a.budget))return 'skool';
+ return 'youtube';
 }
