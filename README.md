@@ -8,11 +8,14 @@ El registro recoge nombre, país, teléfono con indicativo y correo. El quiz inc
 
 ## Clasificación
 
-- YouTube: sin ventas, oferta poco clara, sin presupuesto definido, aprendizaje gratuito, exploración o falta de tiempo para implementar.
-- Skool: oferta clara, ventas, presupuesto y disposición para implementar, sin reunir todos los criterios de mentoría.
-- Sesión gratuita de 30 minutos: ventas, oferta clara, precio que ya cobra, acompañamiento personal, inicio inmediato, tiempo disponible y presupuesto desde USD 4.500.
+El presupuesto disponible determina la ruta:
+- Sin presupuesto, menos de USD 500 o presupuesto por definir: YouTube.
+- Desde USD 500 y menos de USD 2.000: Skool.
+- Desde USD 2.000: agenda y WhatsApp para una sesión estratégica gratuita de 30 minutos.
 
-El presupuesto por sí solo no determina la ruta. La recomendación no garantiza resultados ni obliga a comprar. Los enlaces se configuran en `CONFIG` en `index.html`. WhatsApp está configurado para la ruta de sesión estratégica con el indicativo confirmado por el titular.
+Los límites son inclusivos: USD 500 habilita Skool y USD 2.000 habilita llamada. Etapa, claridad, intención y tiempo disponible se guardan para contextualizar el seguimiento y personalizar el diagnóstico/PDF; no bloquean la ruta indicada por el presupuesto. La mentoría mantiene su precio de USD 4.500. Calificar para la llamada no implica disponer del precio completo ni garantiza una compra.
+
+Los enlaces se configuran en `CONFIG` en `index.html`. WhatsApp está configurado con el indicativo confirmado por el titular.
 
 ## PDF
 
@@ -22,7 +25,7 @@ El presupuesto por sí solo no determina la ruta. La recomendación no garantiza
 
 El acceso a PROSPECTOS y al endpoint de Apps Script fue restablecido y verificado el 24 de septiembre de 2026 (UTC). Una prueba sintética confirmó el alta del contacto y la actualización de sus respuestas en la misma fila. El registro técnico fue retirado tras la verificación.
 
-La columna N de Prospectos usa las respuestas de AC para aplicar la clasificación actual del quiz (etapa, claridad, precio, intención, disponibilidad y presupuesto). Los registros antiguos sin presupuesto conservan sus criterios anteriores. Se comprobaron las rutas YouTube, Skool y Mentoría 1:1, incluido el caso de un principiante con presupuesto alto.
+La columna N de Prospectos usa el presupuesto de las respuestas en AC para aplicar los mismos límites que el quiz. Los registros antiguos sin un rango de presupuesto conservan sus criterios anteriores; no se infiere una cantidad que no declararon. Se verificaron las tres rutas y los límites de USD 500 y USD 2.000.
 
 El envío sigue siendo asíncrono: la interfaz permite avanzar antes de recibir la confirmación. La prueba de alta tardó aproximadamente 16 segundos en el servicio; no se promete persistencia en 1–2 segundos. El estado de sincronización se conserva internamente; los avisos técnicos no se muestran al cliente. Los reintentos y la confirmación del servidor siguen activos. No se realizó una migración a Supabase.
 
