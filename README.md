@@ -20,7 +20,11 @@ El presupuesto por sí solo no determina la ruta. La recomendación no garantiza
 
 ## Estado de la integración
 
-El endpoint de Apps Script devuelve un bloqueo de Google por sus condiciones del servicio. El guardado en Sheets no está operativo mientras este bloqueo continúe. No confundir una copia local pendiente con un registro guardado. `backend/Code.gs` incluye la clasificación nueva preparada para cuando se pueda restaurar legítimamente el servicio; actualizar el archivo en GitHub no despliega Apps Script.
+El acceso a PROSPECTOS y al endpoint de Apps Script fue restablecido y verificado el 24 de septiembre de 2026 (UTC). Una prueba sintética confirmó el alta del contacto y la actualización de sus respuestas en la misma fila. El registro técnico fue retirado tras la verificación.
+
+La columna N de Prospectos usa las respuestas de AC para aplicar la clasificación actual del quiz (etapa, claridad, precio, intención, disponibilidad y presupuesto). Los registros antiguos sin presupuesto conservan sus criterios anteriores. Se comprobaron las rutas YouTube, Skool y Mentoría 1:1, incluido el caso de un principiante con presupuesto alto.
+
+El envío sigue siendo asíncrono: la interfaz permite avanzar antes de recibir la confirmación. La prueba de alta tardó aproximadamente 16 segundos en el servicio; no se promete persistencia en 1–2 segundos. Un mensaje de pendiente indica que aún no hay confirmación del servidor. No se realizó una migración a Supabase.
 
 ## Comprobaciones
 
