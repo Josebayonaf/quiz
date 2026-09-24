@@ -34,7 +34,7 @@ function doPost(e){let lock;try{
  }
  if(p.event==='qualified'){
  sheet.getRange(row,10,1,4).setValues([[{learn:'Aprender gratis',community:'Comunidad',personal:'Mentoría personal'}[q.intent],{now:'Próximos 30 días',later:'Más adelante',explore:'Explorando'}[q.timing],q.commitment==='yes'?'Sí':'No',{free:'Gratis',community:'Membresía',ready:'Considera USD 4.500',unsure:'Por definir'}[q.investment]]]);
- if(a.budget)sheet.getRange(row,14).setValue({youtube:'YouTube',skool:'Skool',mentoria:'Mentoría'}[qualifyAnswers(a)]);
+ if(a.budget)sheet.getRange(row,14).setValue({youtube:'YouTube',skool:'Skool',mentoria:'Mentoría 1:1'}[qualifyAnswers(a)]);
  sheet.getRange(row,15).setValue('Calificación completa');
  }
  SpreadsheetApp.flush();return json({ok:true,id:p.id});
