@@ -34,7 +34,16 @@ function doPost(e){let lock;try{
  }
  if(p.event==='qualified'){
  sheet.getRange(row,10,1,4).setValues([[{learn:'Aprender gratis',community:'Comunidad',personal:'Mentoría personal'}[q.intent],{now:'Próximos 30 días',later:'Más adelante',explore:'Explorando'}[q.timing],q.commitment==='yes'?'Sí':'No',{free:'Gratis',community:'Membresía',ready:'Considera USD 4.500',unsure:'Por definir'}[q.investment]]]);
+ if(a.budget)sheet.getRange(row,14).setValue({youtube:'YouTube',skool:'Skool',mentoria:'Mentoría'}[qualifyAnswers(a)]);
  sheet.getRange(row,15).setValue('Calificación completa');
  }
  SpreadsheetApp.flush();return json({ok:true,id:p.id});
  }catch(err){return json({ok:false,error:'unable_to_save'});}finally{if(lock?.hasLock())lock.releaseLock();}}
+
+function qualifyAnswers(a){
+ const hasBudget=['under500','500to1000','1000to2000','2000to4500','4500to5000','5000plus'].includes(a.budget);
+ const prepared=a.clarity==='clear'&&['sales','steady'].includes(a.stage);
+ if(!prepared||!hasBudget||a.intent==='learn'||a.commitment!=='yes'||a.timing==='explore')return 'youtube';
+ if(['sales','steady'].includes(a.stage)&&a.pricing==='charging'&&a.intent==='personal'&&a.timing==='now'&&['4500to5000','5000plus'].includes(a.budget))return 'mentoria';
+ return 'skool';
+}
