@@ -24,7 +24,7 @@ El acceso a PROSPECTOS y al endpoint de Apps Script fue restablecido y verificad
 
 La columna N de Prospectos usa las respuestas de AC para aplicar la clasificación actual del quiz (etapa, claridad, precio, intención, disponibilidad y presupuesto). Los registros antiguos sin presupuesto conservan sus criterios anteriores. Se comprobaron las rutas YouTube, Skool y Mentoría 1:1, incluido el caso de un principiante con presupuesto alto.
 
-El envío sigue siendo asíncrono: la interfaz permite avanzar antes de recibir la confirmación. La prueba de alta tardó aproximadamente 16 segundos en el servicio; no se promete persistencia en 1–2 segundos. Un mensaje de pendiente indica que aún no hay confirmación del servidor. No se realizó una migración a Supabase.
+El envío sigue siendo asíncrono: la interfaz permite avanzar antes de recibir la confirmación. La prueba de alta tardó aproximadamente 16 segundos en el servicio; no se promete persistencia en 1–2 segundos. El estado de sincronización se conserva internamente; los avisos técnicos no se muestran al cliente. Los reintentos y la confirmación del servidor siguen activos. No se realizó una migración a Supabase.
 
 ## Comprobaciones
 
