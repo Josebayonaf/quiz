@@ -2,8 +2,8 @@
 <html lang="es">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#080c0c"><meta name="description" content="Identifica qué ordenar primero en tu negocio de servicios. Un diagnóstico gratuito de Jumpers, por José Bayona, con un plan de acción de 7 días.">
-<title>Tu siguiente salto · Diagnóstico Jumpers</title>
+<meta name="theme-color" content="#080c0c"><meta name="description" content="Recibe tu plan de acción de 7 días para desbloquear tu negocio de servicios. Completa el quiz gratuito de Jumpers y descubre qué trabajar primero.">
+<title>Tu plan de acción de 7 días · Jumpers</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%228%22%20fill%3D%22%23080c0c%22%2F%3E%3Cpath%20d%3D%22M7%207h19v19h-6V17L9%2028l-4-4%2011-11H7z%22%20fill%3D%22%2335dfc5%22%2F%3E%3C%2Fsvg%3E">
 <link rel="canonical" href="https://quiz.josebayonaf.com/">
 <style>
@@ -59,6 +59,48 @@ body{background:#000;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",
 .route-reminder{margin:40px 0 0;border-color:#39796b}.route-reminder .result-actions{margin-bottom:0}
 .result-utility{margin:28px 0 0}.result-utility .micro{margin-bottom:12px}
 @media(max-width:680px){.route-primary{padding:26px 21px;margin-bottom:32px}.route-primary .result-actions,.route-reminder .result-actions{flex-direction:column;align-items:stretch}.route-primary .btn,.route-reminder .btn{width:100%;min-width:0;min-height:52px}.route-primary h1{font-size:32px}.route-reminder h2{font-size:26px}}
+/* Landing: make the seven-day document and the path to it explicit. */
+#landing .hero{gap:32px;min-height:650px;padding-block:64px}
+#landing .hero h1{font-size:clamp(2.5rem,4.6vw,4rem);line-height:1.08;letter-spacing:-.045em;max-width:720px}
+#landing .hero .desc{font-size:1rem;line-height:1.75;max-width:560px}
+#landing .hero .eyebrow{font-size:.875rem;line-height:1.6;letter-spacing:.08em}
+#landing .under-cta{font-size:.875rem!important;gap:8px 18px}
+#landing .hero-index,#landing .orbital-type,#landing .cross,#landing .coord,#landing .art-bottom,#landing .orbit-satellite{display:none}
+#landing .section-head p,#landing .card p{font-size:1rem;line-height:1.7}
+#landing .card .num{font-size:.875rem}
+#como-funciona{padding-block:64px}
+#como-funciona .section-head{display:block}
+#como-funciona h2{max-width:800px}
+.deliverables{border-top:1px solid #29433f;scroll-margin-top:24px}
+.deliverables .section-head{display:block;max-width:880px}
+.deliverables .section-head h2{max-width:780px;font-size:clamp(2rem,3.4vw,3rem);line-height:1.15}
+.deliverables .section-head>p{max-width:710px;margin-top:20px}
+.deliverables-layout{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:32px;align-items:start}
+.deliverables-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.deliverable{padding:26px 24px;border:1px solid #2b3735;border-radius:18px;background:#111817;min-width:0}
+.deliverable .num{font:500 .875rem monospace;color:var(--mint)}
+.deliverable h3{font-size:1.25rem;line-height:1.35;letter-spacing:-.02em;margin:20px 0 12px;font-weight:600}
+.deliverable p{color:var(--muted);font-size:1rem;line-height:1.7;margin:0}
+.plan-preview{margin:0;min-width:0;border:1px solid #3e6258;border-radius:18px;overflow:hidden;background:#f4f7f5;color:#203a31;box-shadow:0 18px 50px #0003}
+.plan-preview figcaption{background:#102b24;color:#bbdcd0;font-size:.875rem;line-height:1.6;padding:17px 26px;border-bottom:1px solid #3e6258}
+.plan-preview-body{padding:28px}
+.plan-preview-heading{display:flex;justify-content:space-between;align-items:start;gap:16px;padding-bottom:22px;border-bottom:1px solid #cbdad3}
+.plan-preview-heading h3{font-size:1.75rem;line-height:1.15;letter-spacing:-.035em;margin:0;color:#102c21;max-width:220px}
+.plan-preview-heading span{font-size:.875rem;line-height:1.4;font-weight:700;background:#cff3e8;color:#126750;border-radius:8px;padding:10px;white-space:nowrap}
+.plan-preview-focus{font-size:1rem;line-height:1.65;margin:22px 0;color:#234737}
+.plan-preview-days{list-style:none;margin:0;padding:0}
+.plan-preview-days li{padding:18px 0;border-top:1px solid #cbdad3}
+.plan-preview-days strong{display:block;font-size:.875rem;color:#126750;margin-bottom:8px}
+.plan-preview-days p{font-size:1rem;line-height:1.6;margin:0;color:#203a31}
+.plan-preview-metric{padding:18px;background:#e1eee7;border-radius:10px;margin-top:8px}
+.plan-preview-metric h4{font-size:1rem;line-height:1.4;margin:0 0 8px;color:#126750}
+.plan-preview-metric p{font-size:.875rem;line-height:1.65;margin:0;color:#203a31}
+.plan-preview-note{font-size:.875rem;line-height:1.6;color:#486858;margin:20px 0 0}
+.deliverables-cta{margin-top:32px}
+.deliverables-cta p{font-size:.875rem;line-height:1.7;color:var(--muted);margin:14px 0 0}
+#landing .btn{font-size:1rem;white-space:normal;text-align:left;line-height:1.4}
+@media(max-width:1050px){.deliverables-layout{grid-template-columns:1fr;gap:24px}.plan-preview{max-width:620px;width:100%;justify-self:center}#landing .hero{gap:12px}#landing .hero h1{font-size:clamp(2.5rem,5vw,3.5rem)}}
+@media(max-width:680px){#landing .hero{padding-block:38px 20px;gap:0}#landing .hero h1{font-size:2.5rem;letter-spacing:-.04em}#landing .hero .eyebrow{font-size:.875rem;letter-spacing:.05em}#landing .art{height:300px}#como-funciona{padding-block:44px}.deliverables-grid{grid-template-columns:1fr}.deliverable{padding:24px}.deliverable h3{margin-top:14px}.plan-preview-body{padding:24px}.plan-preview figcaption{padding:16px 24px}.plan-preview-heading h3{font-size:1.5rem}.deliverables-cta .btn{width:100%;justify-content:space-between;gap:12px}.deliverables .section-head h2{font-size:2rem}}
 </style>
 </head>
 <body>
@@ -66,14 +108,36 @@ body{background:#000;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",
 <header class="topbar"><a class="brand" href="#" id="brand" aria-label="Jumpers, inicio"><svg viewBox="0 0 28 28" fill="none" aria-hidden="true"><path d="M4 4h20v20h-6V14L7 25l-4-4L14 10H4z" fill="currentColor"/></svg><span>jumpers<small>POR JOSÉ BAYONA</small></span></a><nav class="nav" aria-label="Navegación"><a href="#como-funciona" id="how-nav">Cómo funciona</a><span class="pill"><span class="dot"></span>DIAGNÓSTICO GRATUITO</span><button class="motion-toggle" id="motion-toggle" type="button" aria-pressed="false" aria-label="Pausar animaciones">Ⅱ Movimiento</button></nav></header>
 <main id="main">
 <div id="landing">
-<section class="hero"><div class="hero-copy"><div class="eyebrow">Para marcas personales y emprendedores</div><h1>Tienes el talento.<br>¿Cómo convertirlo<br><span class="accent">en un negocio?</span></h1><p class="desc">Quieres monetizar lo que sabes, pero no tienes claro qué ofrecer, cómo conseguir clientes o por dónde empezar. Dale estructura a tu negocio de servicios, sin seguir postergándolo ni tener que ser experto en marketing o tecnología.</p><button class="btn" id="start">Encontrar mi siguiente paso <span class="arrow" aria-hidden="true">↗</span></button><p class="micro under-cta"><span>Resultado al terminar</span><span>Sin costo · A tu ritmo</span></p></div>
+<section class="hero"><div class="hero-copy"><div class="eyebrow">Para coaches, mentores y profesionales de servicios</div><h1>Recibe tu <span class="accent">plan de acción de 7 días</span> para desbloquear tu negocio de servicios.</h1><p class="desc">Responde unas preguntas sobre tu negocio e identifica tu principal cuello de botella. Al terminar, recibirás un documento con acciones para los próximos 7 días y una forma de medir tu avance.</p><button class="btn" id="start">Hacer el quiz y recibir mi plan <span class="arrow" aria-hidden="true">↗</span></button><p class="micro under-cta"><span>Gratis</span><span>Basado en tus respuestas</span><span>Acciones para 7 días</span></p></div>
 <div class="art" aria-hidden="true"><span class="orbital-type">DE LA IDEA A LA ACCIÓN</span><span class="cross">+</span>
 <svg class="orbit" viewBox="0 0 580 520" fill="none"><defs><linearGradient id="ring" x1="65" y1="190" x2="510" y2="370" gradientUnits="userSpaceOnUse"><stop stop-color="#071a16"/><stop offset=".22" stop-color="#2bd5b6"/><stop offset=".39" stop-color="#99ffe5"/><stop offset=".5" stop-color="#067e68"/><stop offset=".67" stop-color="#031611"/><stop offset=".85" stop-color="#3ce5c7"/><stop offset="1" stop-color="#071b15"/></linearGradient><linearGradient id="arrow-grad" x1="240" y1="290" x2="380" y2="155" gradientUnits="userSpaceOnUse"><stop stop-color="#0c6854"/><stop offset=".5" stop-color="#43dfb9"/><stop offset="1" stop-color="#ceffee"/></linearGradient><filter id="blur"><feGaussianBlur stdDeviation="13"/></filter></defs><ellipse cx="291" cy="288" rx="244" ry="125" transform="rotate(-37 291 288)" stroke="#19d2ac" stroke-opacity=".23" stroke-width="24" filter="url(#blur)"/><ellipse cx="291" cy="275" rx="242" ry="128" transform="rotate(-37 291 275)" stroke="url(#ring)" stroke-width="30"/><ellipse cx="291" cy="267" rx="241" ry="122" transform="rotate(-37 291 267)" stroke="#a8ffe0" stroke-opacity=".35" stroke-width="1"/><ellipse cx="291" cy="267" rx="264" ry="151" transform="rotate(-37 291 267)" stroke="#386657" stroke-opacity=".5" stroke-width=".8"/><path d="M208 162h139v139h-42v-66l-89 89-30-30 89-90h-67z" fill="#052e24" transform="translate(7 12)"/><path d="M208 162h139v139h-42v-66l-89 89-30-30 89-90h-67z" fill="url(#arrow-grad)" stroke="#9fffe2" stroke-opacity=".6"/><path d="M208 162h139v139" stroke="#e8fff6" stroke-opacity=".7" stroke-width="2"/></svg>
-<div class="mini-card"><b>7</b><span>DÍAS<br>UN FOCO CLARO ↗</span></div><div class="float-card"><span class="label">TU SIGUIENTE PASO</span><strong>Da el salto a la<br>acción determinante.</strong><div class="line"></div><div class="end"><span>CLARIDAD</span><span>ACCIÓN ↗</span></div></div><span class="orbit-satellite">✳</span><span class="coord">OFERTA / CONTENIDO / VENTAS</span><span class="art-bottom">CRECER SIN PERDERTE EN EL CAMINO.</span></div><span class="hero-index">DIAGNÓSTICO 01 / UN NUEVO PUNTO DE PARTIDA</span></section>
+<div class="mini-card"><b>7</b><span>DÍAS<br>UN FOCO CLARO ↗</span></div><div class="float-card"><span class="label">TU SIGUIENTE PASO</span><strong>Tu plan de acción<br>de 7 días.</strong><div class="line"></div><div class="end"><span>CLARIDAD</span><span>ACCIÓN ↗</span></div></div><span class="orbit-satellite">✳</span><span class="coord">OFERTA / CONTENIDO / VENTAS</span><span class="art-bottom">CRECER SIN PERDERTE EN EL CAMINO.</span></div><span class="hero-index">DIAGNÓSTICO 01 / UN NUEVO PUNTO DE PARTIDA</span></section>
 <div class="strip"><span><b>↗</b> COACHES & MENTORES</span><span><b>↗</b> CONSULTORES</span><span><b>↗</b> PROFESIONALES DE SERVICIOS</span></div>
-<section class="section" id="como-funciona"><div class="section-head"><div><div class="eyebrow">Tu negocio, en perspectiva</div><h2>A veces, avanzar empieza<br>por saber <span class="accent">dónde mirar.</span></h2></div><p>Sin una estructura y un mapa de trabajo claro, se traban tu contenido, tus ventas y la entrega de tu servicio. Identifica dónde empezar y llévate un plan de 7 días para pasar a la acción, avanzar hacia el cierre de clientes y mejorar tus resultados.</p></div><div class="cards"><article class="card"><span class="num">01 / TU PUNTO DE PARTIDA</span><h3>Cuéntanos dónde estás.</h3><p>¿Aún estás armando tu oferta o ya tienes clientes? Las preguntas se adaptan a tu etapa.</p></article><article class="card"><span class="num">02 / TU PRIORIDAD</span><h3>Entiende qué ordenar.</h3><p>Relacionamos tus respuestas con una prioridad y te explicamos por qué empezar ahí.</p></article><article class="card"><span class="num">03 / TU SIGUIENTE PASO</span><h3>Llévalo a la acción.</h3><p>Recibe tres acciones, un ejercicio práctico y una métrica para los próximos 7 días.</p></article></div></section>
+<section class="section" id="como-funciona"><div class="section-head"><div><div class="eyebrow">Tres pasos para empezar</div><h2>Así obtienes tu <span class="accent">plan de acción.</span></h2></div></div><div class="cards"><article class="card"><span class="num">01 / TU PUNTO DE PARTIDA</span><h3>Cuéntanos dónde estás.</h3><p>Responde preguntas sobre tu etapa, tu oferta y cómo consigues clientes.</p></article><article class="card"><span class="num">02 / TU PRIORIDAD</span><h3>Descubre qué trabajar primero.</h3><p>Identifica el área que más atención necesita según tus respuestas.</p></article><article class="card"><span class="num">03 / TU PLAN</span><h3>Recibe tu plan de 7 días.</h3><p>Llévate un documento con acciones diarias para trabajar esa prioridad y revisar tu avance.</p></article></div></section>
+<section class="section deliverables" id="tu-plan" aria-labelledby="deliverables-title">
+ <div class="section-head"><div class="eyebrow">Un documento para pasar a la acción</div><h2 id="deliverables-title">Esto es lo que te llevas <span class="accent">al completar el quiz.</span></h2><p>Un documento basado en tus respuestas para que sepas qué trabajar primero y qué hacer durante los próximos 7 días.</p></div>
+ <div class="deliverables-layout">
+  <div class="deliverables-grid">
+   <article class="deliverable"><span class="num">01 / TU CUELLO DE BOTELLA</span><h3>Identifica qué está frenando tu avance</h3><p>Descubre qué área de tu negocio necesita atención: tu oferta, cómo atraes interesados, tus conversaciones de venta o tu ejecución y organización. Entiende qué respuestas llevaron a esa recomendación.</p></article>
+   <article class="deliverable"><span class="num">02 / TU PLAN DE 7 DÍAS</span><h3>Sigue un paso concreto cada día</h3><p>Recibe acciones concretas, organizadas por día, para trabajar esa prioridad sin intentar resolver todo al mismo tiempo.</p></article>
+   <article class="deliverable"><span class="num">03 / TU EJERCICIO</span><h3>Aplícalo a tu propio negocio</h3><p>Llévate un ejercicio práctico relacionado con tu principal dificultad para empezar a trabajar sobre tu situación real.</p></article>
+   <article class="deliverable"><span class="num">04 / TU SEGUIMIENTO</span><h3>Revisa tu avance</h3><p>Tendrás una métrica de seguimiento para observar qué hiciste, qué cambió y qué necesitas seguir ajustando al terminar la semana.</p></article>
+  </div>
+  <figure class="plan-preview" aria-labelledby="plan-preview-caption">
+   <figcaption id="plan-preview-caption">Vista previa · Ejemplo de un plan de oferta</figcaption>
+   <div class="plan-preview-body">
+    <div class="plan-preview-heading"><h3>Tu plan de acción</h3><span>7 días</span></div>
+    <p class="plan-preview-focus"><strong>Tu prioridad: Oferta</strong><br>Dale forma a una oferta que puedas poner a prueba.</p>
+    <ol class="plan-preview-days"><li><strong>DÍA 01</strong><p>Elige a una persona concreta a la que puedas ayudar y un problema que conozcas bien.</p></li><li><strong>DÍA 02</strong><p>Escribe tu propuesta en una frase: a quién ayudas, qué resultado trabajas y cómo.</p></li></ol>
+    <div class="plan-preview-metric"><h4>Qué observar al terminar la semana</h4><p>Registra las conversaciones de validación y las dudas que se repiten. Tu primera referencia puede ser tres conversaciones, no una promesa de ventas.</p></div>
+    <p class="plan-preview-note">Este es un extracto de ejemplo. Tu documento incluye los 7 días, un ejercicio y una métrica según tus respuestas.</p>
+   </div>
+  </figure>
+ </div>
+ <div class="deliverables-cta"><button class="btn" type="button" data-start>Hacer el quiz y recibir mi plan <span class="arrow" aria-hidden="true">↗</span></button><p>Quiz y documento gratuitos · Basado en tus respuestas</p></div>
+</section>
 <section class="manifesto"><div class="signature">José Bayona<span>MENTOR · FUNDADOR DE JUMPERS</span></div><div><blockquote>“Si el éxito me cuesta mi esencia,<br>no es éxito.”</blockquote><p>En Jumpers trabajamos la claridad, la ejecución y las habilidades para construir un negocio de servicios. Este diagnóstico es un primer paso para crecer con dirección y sin perderte en el proceso.</p></div></section>
-<section class="section faq"><div class="eyebrow">Antes de empezar</div><h2>Vamos a hacerlo simple.</h2><details><summary>¿Me sirve si todavía no he vendido?</summary><p>Sí. Hay una ruta para concretar tu oferta y empezar a contrastarla con posibles clientes. No necesitas tener una comunidad grande ni un negocio consolidado.</p></details><details><summary>¿Qué voy a recibir?</summary><p>Una prioridad sugerida a partir de tus respuestas, un plan de 7 días y un ejercicio que puedes empezar hoy. Puedes descargar tu plan y elegir cómo seguir aprendiendo.</p></details><details><summary>¿Es una evaluación de mi personalidad?</summary><p>No. Revisamos decisiones y acciones de tu negocio. El resultado es orientativo: no diagnostica condiciones psicológicas ni garantiza ventas o ingresos.</p></details><details><summary>¿Tengo que comprar algo después?</summary><p>No. El diagnóstico y tu plan son gratuitos. Según tus respuestas, te recomendaremos contenido gratuito, una comunidad de implementación o una sesión estratégica gratuita con José.</p></details><div style="margin-top:30px"><button class="btn" data-start>Empezar mi diagnóstico <span class="arrow" aria-hidden="true">↗</span></button></div></section>
+<section class="section faq"><div class="eyebrow">Antes de empezar</div><h2>Vamos a hacerlo simple.</h2><details><summary>¿Me sirve si todavía no he vendido?</summary><p>Sí. Hay una ruta para concretar tu oferta y empezar a contrastarla con posibles clientes. No necesitas tener una comunidad grande ni un negocio consolidado.</p></details><details><summary>¿Qué voy a recibir?</summary><p>Un documento en PDF con el área que conviene trabajar primero, las respuestas que explican esa recomendación, acciones para cada uno de los próximos 7 días, un ejercicio práctico y una métrica para revisar tu avance.</p></details><details><summary>¿Es una evaluación de mi personalidad?</summary><p>No. Revisamos decisiones y acciones de tu negocio. El resultado es orientativo: no diagnostica condiciones psicológicas ni garantiza ventas o ingresos.</p></details><details><summary>¿Tengo que comprar algo después?</summary><p>No. El diagnóstico y tu plan son gratuitos. Según tus respuestas, te recomendaremos contenido gratuito, una comunidad de implementación o una sesión estratégica gratuita con José.</p></details><div style="margin-top:30px"><button class="btn" data-start>Hacer el quiz y recibir mi plan <span class="arrow" aria-hidden="true">↗</span></button></div></section>
 </div>
 <section id="quiz" class="flow-shell" hidden aria-label="Diagnóstico de negocio"><div class="flow-top"><span id="step-label"></span><span>UN PASO A LA VEZ</span></div><div class="steps" aria-hidden="true"><div class="step"></div><div class="step"></div><div class="step"></div><div class="step"></div><div class="step"></div></div><form id="quiz-form" class="question-panel" novalidate><div class="eyebrow" id="block-label"></div><h1 id="question-title" tabindex="-1"></h1><p class="intro" id="question-intro"></p><div id="questions"></div><p id="quiz-error" class="error" role="alert"></p><div class="flow-actions"><button class="back" type="button" id="back">← Volver</button><button type="submit" class="btn" id="next">Continuar <span aria-hidden="true">→</span></button></div></form><p class="micro">Responde según tu situación real. Si no llevas una métrica, puedes decirlo.</p></section>
 <section id="result" class="result-shell" hidden aria-label="Tu resultado"></section>
