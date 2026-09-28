@@ -1,0 +1,53 @@
+name: Remove requested testimonial text
+on:
+  push:
+    branches: [update/remove-testimonial-copy-20260928]
+    paths: [.github/workflows/remove-testimonial-copy.yml]
+permissions:
+  contents: write
+jobs:
+  edit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Remove only the two requested paragraphs and their description reference
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          p = Path('index.html')
+          before = p.read_text()
+          intro = '  <p>Iván, Andrés y Sara comparten su experiencia con el acompañamiento. Elige un video y conoce cada proceso.</p>\n'
+          note = ' <p class="reviews-disclosure" id="reviews-disclosure">Cada experiencia es individual y no garantiza resultados similares. Al seleccionar un testimonio se carga el reproductor de Google Drive. También puedes abrir cada video en otra pestaña.</p>\n'
+          reference = ' aria-describedby="reviews-disclosure"'
+          after = before
+          for target in (intro, note, reference):
+              assert after.count(target) == 1, 'Expected exactly one requested element'
+              after = after.replace(target, '', 1)
+          assert re.findall(r'<script\b[\s\S]*?</script>', before) == re.findall(r'<script\b[\s\S]*?</script>', after), 'Scripts must remain identical'
+          assert re.findall(r'<article class="review-card"[\s\S]*?</article>', before) == re.findall(r'<article class="review-card"[\s\S]*?</article>', after), 'Video cards must remain identical'
+          p.write_text(after)
+          t = Path('tests/reviews.cjs')
+          test = t.read_text()
+          old = "assert(section.includes('no garantiza resultados similares'));"
+          new = "assert(!section.includes('reviews-disclosure'));\nassert(!section.includes('Iván, Andrés y Sara comparten su experiencia'));\nassert(!section.includes('Cada experiencia es individual y no garantiza resultados similares'));"
+          assert test.count(old) == 1, 'Expected existing review assertion'
+          t.write_text(test.replace(old, new, 1))
+          PY
+      - name: Verify quiz and testimonial regression tests
+        run: |
+          node tests/logic.cjs
+          node tests/qualification.cjs
+          node tests/outbox.cjs
+          node tests/reviews.cjs
+          node tests/thumbnails.cjs
+          git diff --check
+      - name: Save changes on preparation branch only
+        run: |
+          test "$GITHUB_REF_NAME" = "update/remove-testimonial-copy-20260928"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html tests/reviews.cjs
+          git commit -m "Remove two requested testimonial paragraphs without changing video cards"
+          git push origin HEAD:refs/heads/update/remove-testimonial-copy-20260928
