@@ -2,7 +2,11 @@
 const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
 const html=fs.readFileSync(__dirname+'/../index.html','utf8');
 const js=html.match(/<script>([\s\S]*?)<\/script>/)[1];new Function(js);
-assert(html.includes('Descubre qué está <span class="accent">frenando tus ventas'));
+assert(html.includes('Haz el quiz gratuito y descubre <span class="accent">qué está frenando tus ventas'));
+assert(html.includes('Hacer el quiz y ver mi diagnóstico'));
+assert(html.includes('Quiz gratuito para coaches'));
+assert(html.includes('Resultado al terminar'));
+assert(!html.includes('Descubrir qué necesita mi negocio'));
 assert.equal((html.match(/class="problem-card"/g)||[]).length,5);
 assert(!html.includes('Hacer el quiz y recibir mi plan'));
 assert(!html.includes('573183824316'));
