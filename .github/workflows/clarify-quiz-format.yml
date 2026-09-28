@@ -1,0 +1,85 @@
+name: Clarify the quiz format without changing the diagnosis
+on:
+  push:
+    branches: [update/clarify-quiz-format-20260928]
+    paths: [.github/workflows/clarify-quiz-format.yml]
+permissions:
+  contents: write
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Make quiz format explicit in the hero and entry buttons
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import hashlib, re
+          p = Path('index.html')
+          data = p.read_bytes()
+          assert hashlib.sha1(b'blob '+str(len(data)).encode()+b'\0'+data).hexdigest() == 'bcde9fb42b34a6bf6e8885415bfa44629015bfd2', 'Base changed; review before modifying'
+          original = data.decode('utf-8')
+          text = original
+          replacements = [
+            ('Descubre qué está frenando tus ventas y qué trabajar primero para conseguir clientes con más constancia. Diagnóstico gratuito para negocios de servicios, con acciones para los próximos 7 días.', 'Haz el quiz gratuito de Jumpers y descubre qué está frenando tus ventas. Obtén un diagnóstico según tus respuestas y un plan de acción para los próximos 7 días.'),
+            ('<title>Descubre qué necesita tu negocio · Diagnóstico Jumpers</title>', '<title>Quiz gratuito: descubre qué necesita tu negocio · Jumpers</title>'),
+            ('>DIAGNÓSTICO GRATUITO</span>', '>QUIZ GRATUITO</span>'),
+            ('Diagnóstico gratuito para coaches, mentores, consultores y profesionales de servicios', 'Quiz gratuito para coaches, mentores, consultores y profesionales de servicios'),
+            ('<h1>Descubre qué está <span class="accent">frenando tus ventas</span> y qué trabajar primero para conseguir clientes con más constancia.</h1>', '<h1>Haz el quiz gratuito y descubre <span class="accent">qué está frenando tus ventas.</span></h1>'),
+            ('<p class="desc">Responde el diagnóstico e identifica qué área necesita atención primero según tu situación. Además, recibe un paso a paso para empezar a trabajar en ella durante los próximos 7 días.</p>', '<p class="desc">Responde preguntas sobre tu oferta, contenido, ventas y organización. Al terminar, verás tu diagnóstico: qué área conviene trabajar primero y por qué. Además, recibirás un plan de acción para los próximos 7 días.</p>'),
+            ('<span>Gratis</span><span>Basado en tus respuestas</span><span>Una prioridad concreta</span>', '<span>Quiz gratuito</span><span>Resultado al terminar</span><span>Plan de 7 días incluido</span>'),
+            ('<span class="label">DEJA DE ADIVINAR</span>', '<span class="label">TU RESULTADO DEL QUIZ</span>'),
+            ('<h3>Cuéntanos qué está pasando.</h3><p>Responde sobre tu etapa, tu oferta, cómo llegan los interesados y qué ocurre en tus conversaciones.</p>', '<h3>Responde el quiz.</h3><p>Contesta preguntas sobre tu etapa, tu oferta, cómo llegan los interesados y qué ocurre en tus conversaciones.</p>'),
+            ('Diagnóstico gratuito · Basado en tus respuestas · Plan de acción incluido', 'Quiz gratuito · Diagnóstico según tus respuestas · Plan de acción incluido')
+          ]
+          for old, new in replacements:
+            assert text.count(old) == 1, ('Expected one match', old[:100], text.count(old))
+            text = text.replace(old, new, 1)
+          old_cta = 'Descubrir qué necesita mi negocio'
+          new_cta = 'Hacer el quiz y ver mi diagnóstico'
+          count = text.count(old_cta)
+          assert 4 <= count <= 6, ('Unexpected CTA count', count)
+          text = text.replace(old_cta, new_cta)
+          assert re.findall(r'<script\b[\s\S]*?</script>', original) == re.findall(r'<script\b[\s\S]*?</script>', text), 'No application script changes allowed'
+          founder = r'<section class="founder-section"[\s\S]*?</section>'
+          assert re.search(founder, original).group() == re.search(founder, text).group()
+          assert re.findall(r'<article class="review-card"[\s\S]*?</article>', original) == re.findall(r'<article class="review-card"[\s\S]*?</article>', text)
+          buttons = re.findall(r'<button[^>]*(?:id="start"|data-start)[^>]*>(.*?)</button>', text)
+          assert len(buttons) == count and all(new_cta in x for x in buttons)
+          p.write_text(text, encoding='utf-8')
+          t = Path('tests/diagnostico.cjs')
+          test = t.read_text(encoding='utf-8')
+          before = "assert(html.includes('Descubre qué está <span class=\"accent\">frenando tus ventas'));"
+          after = "assert(html.includes('Haz el quiz gratuito y descubre <span class=\"accent\">qué está frenando tus ventas'));\nassert(html.includes('Hacer el quiz y ver mi diagnóstico'));\nassert(html.includes('Quiz gratuito para coaches'));\nassert(html.includes('Resultado al terminar'));\nassert(!html.includes('Descubrir qué necesita mi negocio'));"
+          assert test.count(before) == 1
+          t.write_text(test.replace(before, after, 1), encoding='utf-8')
+          print('PASS: quiz format explicit; '+str(count)+' entry buttons updated; all application scripts, founder biography and testimonial cards unchanged.')
+          PY
+      - name: Run existing regression suite
+        run: |
+          node tests/logic.cjs
+          node tests/outbox.cjs
+          node tests/qualification.cjs
+          node tests/reviews.cjs
+          node tests/thumbnails.cjs
+          node tests/diagnostico.cjs
+          git diff --check
+      - name: Commit verified copy on preparation branch only
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add index.html tests/diagnostico.cjs
+          git commit -m 'Make the free quiz explicit while retaining diagnostic value and seven-day plan'
+          git push origin HEAD:update/clarify-quiz-format-20260928
+      - uses: actions/upload-artifact@v4
+        with:
+          name: quiz-format-validated
+          path: |
+            index.html
+            assets/
+            tests/
+            backend/
+            plan-pdf.js
+            CNAME
+          retention-days: 1
