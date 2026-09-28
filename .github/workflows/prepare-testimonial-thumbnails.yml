@@ -1,0 +1,61 @@
+name: Prepare testimonial thumbnails
+on:
+  push:
+    branches: [update/testimonial-thumbnails-20260928]
+    paths: [.github/workflows/prepare-testimonial-thumbnails.yml]
+permissions:
+  contents: write
+jobs:
+  thumbnails:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install image tooling
+        run: python -m pip install --quiet Pillow
+      - name: Download public thumbnails from the three supplied videos
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from urllib.request import Request, urlopen
+          from urllib.parse import urlencode
+          from PIL import Image, ImageOps
+          import io, json
+          videos = {
+              'ivan': '1Q_4lVjyCBQPpJ1Ud6GBM3pDOlshMf8t8',
+              'andres': '1reeALQQQOf2s2jyk-2CPe0FzQOXrpdCz',
+              'sara': '1nYCGpGNZDl7MEoAmb_WHoVK1Q5cuUjLS',
+          }
+          target = Path('assets/testimonials')
+          target.mkdir(parents=True, exist_ok=True)
+          report = []
+          for name, file_id in videos.items():
+              url = 'https://drive.google.com/thumbnail?' + urlencode({'id': file_id, 'sz': 'w1200'})
+              request = Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+              with urlopen(request, timeout=45) as response:
+                  if not response.headers.get('Content-Type', '').startswith('image/'):
+                      raise RuntimeError(f'{name}: expected a public image response')
+                  data = response.read(12 * 1024 * 1024 + 1)
+              if len(data) > 12 * 1024 * 1024:
+                  raise RuntimeError(f'{name}: unexpectedly large thumbnail')
+              image = ImageOps.exif_transpose(Image.open(io.BytesIO(data))).convert('RGB')
+              if image.width < 300 or image.height < 160:
+                  raise RuntimeError(f'{name}: not a useful video thumbnail: {image.size}')
+              image.thumbnail((1200, 1200), Image.Resampling.LANCZOS)
+              path = target / f'{name}.webp'
+              image.save(path, 'WEBP', quality=85, method=6)
+              report.append({'video': name, 'width': image.width, 'height': image.height, 'bytes': path.stat().st_size})
+          print(json.dumps(report, indent=2))
+          PY
+      - name: Save image assets on the preparation branch only
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add assets/testimonials/ivan.webp assets/testimonials/andres.webp assets/testimonials/sara.webp
+          git commit -m 'Prepare authentic thumbnails from supplied public testimonial videos'
+          git push origin "HEAD:${GITHUB_REF_NAME}"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: testimonial-thumbnails
+          path: assets/testimonials/*.webp
+          retention-days: 1
