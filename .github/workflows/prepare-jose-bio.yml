@@ -1,0 +1,59 @@
+name: Prepare approved founder section
+on:
+  push:
+    branches: [update/jose-bio-20260928]
+    paths: [.github/workflows/prepare-jose-bio.yml]
+permissions:
+  contents: write
+jobs:
+  prepare:
+    if: github.ref == 'refs/heads/update/jose-bio-20260928'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: update/jose-bio-20260928
+      - name: Replace only the founder section
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import hashlib,re
+          p=Path('index.html')
+          old=p.read_text(encoding='utf-8')
+          assert hashlib.sha1(b'blob '+str(len(old.encode())).encode()+b'\0'+old.encode()).hexdigest() == 'c9b5ba61e32577053b2916952ddf24c21188f10c', 'Unexpected source: stop for review'
+          marker='<section class="manifesto">'
+          assert old.count(marker)==1
+          start=old.index(marker)
+          end=old.index('</section>',start)+len('</section>')
+          section=Path('assets/jose-bio.html').read_text(encoding='utf-8').rstrip()
+          new=old[:start]+section+old[end:]
+          assert new.count('</head>')==1
+          new=new.replace('</head>','<link rel="stylesheet" href="assets/jose-bio.css">\n</head>',1)
+          scripts=lambda s: re.findall(r'<script\b[^>]*>.*?</script>',s,re.S)
+          assert scripts(old)==scripts(new), 'Quiz scripts changed unexpectedly'
+          assert '<figure class="plan-preview"' not in new
+          assert new.count('id="sobre-jose"')==1
+          assert new.count('id="quiz-form"')==1
+          assert new.count('id="result"')==1
+          p.write_text(new,encoding='utf-8')
+          print('Source scripts preserved. Founder section and stylesheet integrated.')
+          PY
+      - name: Commit prepared page to review branch
+        run: |
+          git diff --check
+          git diff --stat
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add index.html
+          git commit -m 'Integrate approved founder biography and supplied portrait'
+          git push origin HEAD:update/jose-bio-20260928
+      - uses: actions/upload-artifact@v4
+        with:
+          name: founder-page-preview
+          path: |
+            index.html
+            plan-pdf.js
+            assets/jose-bio.css
+            assets/jose-bayona.webp
+          retention-days: 1
