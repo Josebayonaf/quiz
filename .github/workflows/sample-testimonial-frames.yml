@@ -1,0 +1,51 @@
+name: Select testimonial stills
+on:
+  push:
+    branches: [update/testimonial-thumbnails-20260928]
+    paths: [.github/workflows/sample-testimonial-frames.yml]
+permissions:
+  contents: write
+jobs:
+  frames:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - run: python -m pip install --quiet gdown Pillow
+      - name: Ensure video tools are available
+        run: command -v ffmpeg >/dev/null || (sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg)
+      - name: Capture candidate stills from the supplied public videos
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from PIL import Image
+          import gdown, subprocess, json
+          videos = {'ivan': '1Q_4lVjyCBQPpJ1Ud6GBM3pDOlshMf8t8', 'andres': '1reeALQQQOf2s2jyk-2CPe0FzQOXrpdCz'}
+          target = Path('assets/testimonials/candidates')
+          target.mkdir(parents=True, exist_ok=True)
+          for name, file_id in videos.items():
+              path = f'/tmp/{name}.mov'
+              if not gdown.download(id=file_id, output=path, quiet=True):
+                  raise RuntimeError(f'Could not download the public {name} video')
+              duration = float(subprocess.check_output(['ffprobe', '-v', 'error', '-show_entries', 'format=duration', '-of', 'default=noprint_wrappers=1:nokey=1', path], text=True).strip())
+              for index, fraction in enumerate([0.15, 0.35, 0.55, 0.75], start=1):
+                  timestamp = duration * fraction
+                  png = f'/tmp/{name}-{index}.png'
+                  subprocess.run(['ffmpeg','-loglevel','error','-y','-ss',str(timestamp),'-i',path,'-frames:v','1','-vf','scale=960:-2',png],check=True,timeout=45)
+                  with Image.open(png) as im:
+                      im.convert('RGB').save(target/f'{name}-{index}.webp','WEBP',quality=86,method=6)
+                  print(json.dumps({'video':name,'candidate':index,'seconds':round(timestamp,1),'duration':round(duration,1)}),flush=True)
+              Path(path).unlink()
+          PY
+      - name: Commit candidates to preparation branch, not the live site
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add assets/testimonials/candidates/
+          git commit -m 'Capture representative stills from original testimonial recordings'
+          git push origin "HEAD:${GITHUB_REF_NAME}"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: testimonial-candidate-stills
+          path: assets/testimonials/candidates/*.webp
+          retention-days: 1
