@@ -102,6 +102,7 @@ body{background:#000;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",
 @media(max-width:1050px){.deliverables-layout{grid-template-columns:1fr;gap:24px}.plan-preview{max-width:620px;width:100%;justify-self:center}#landing .hero{gap:12px}#landing .hero h1{font-size:clamp(2.5rem,5vw,3.5rem)}}
 @media(max-width:680px){#landing .hero{padding-block:38px 20px;gap:0}#landing .hero h1{font-size:2.5rem;letter-spacing:-.04em}#landing .hero .eyebrow{font-size:.875rem;letter-spacing:.05em}#landing .art{height:300px}#como-funciona{padding-block:44px}.deliverables-grid{grid-template-columns:1fr}.deliverable{padding:24px}.deliverable h3{margin-top:14px}.plan-preview-body{padding:24px}.plan-preview figcaption{padding:16px 24px}.plan-preview-heading h3{font-size:1.5rem}.deliverables-cta .btn{width:100%;justify-content:space-between;gap:12px}.deliverables .section-head h2{font-size:2rem}}
 </style>
+<link rel="stylesheet" href="assets/jose-bio.css">
 </head>
 <body>
 <div class="wrap">
@@ -126,7 +127,33 @@ body{background:#000;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",
  </div>
  <div class="deliverables-cta"><button class="btn" type="button" data-start>Hacer el quiz y recibir mi plan <span class="arrow" aria-hidden="true">↗</span></button><p>Quiz y documento gratuitos · Basado en tus respuestas</p></div>
 </section>
-<section class="manifesto"><div class="signature">José Bayona<span>MENTOR · FUNDADOR DE JUMPERS</span></div><div><blockquote>“Si el éxito me cuesta mi esencia,<br>no es éxito.”</blockquote><p>En Jumpers trabajamos la claridad, la ejecución y las habilidades para construir un negocio de servicios. Este diagnóstico es un primer paso para crecer con dirección y sin perderte en el proceso.</p></div></section>
+<section class="founder-section" id="sobre-jose" aria-labelledby="founder-title">
+ <div class="founder-grid">
+  <figure class="founder-portrait">
+   <img src="assets/jose-bayona.webp" width="640" height="800" alt="José Bayona compartiendo una conferencia, con micrófono en mano." loading="lazy" decoding="async">
+   <figcaption><strong>José Bayona</strong><span>Mentor · Fundador de Jumpers</span></figcaption>
+  </figure>
+  <div class="founder-copy">
+   <div class="eyebrow">Quién te acompaña</div>
+   <h2 id="founder-title">Soy José Bayona.</h2>
+   <p class="founder-promise">Te ayudo a convertir lo que sabes en <span>un negocio que puedas sostener.</span></p>
+   <p>Soy administrador de empresas, emprendedor, mentor y fundador de Jumpers. Acompaño a coaches, consultores y profesionales de servicios a transformar su conocimiento en una <strong>oferta clara</strong> y desarrollar las habilidades para <strong>comunicarla y venderla.</strong></p>
+   <p class="founder-belief">Mi trabajo une dos partes que no deberían ir separadas: <strong>la persona que emprende y el negocio que está construyendo.</strong></p>
+   <p>Por eso no solo trabajamos estrategia. También trabajamos los miedos, bloqueos y decisiones que muchas veces te llevan a postergar lo que sabes que tienes que hacer.</p>
+   <p>Mi acompañamiento es cercano y práctico: partimos de tu situación real, identificamos qué está frenando tu avance y lo convertimos en <strong>acciones concretas.</strong></p>
+   <p>Porque no se trata solo de saber qué hacer. Se trata de <strong>empezar a hacerlo</strong> y construir un negocio que tenga sentido para ti.</p>
+  </div>
+ </div>
+ <div class="founder-experience" aria-labelledby="founder-experience-title">
+  <h3 id="founder-experience-title">Experiencia que respalda este trabajo</h3>
+  <div class="founder-stats">
+   <div><strong>+100</strong><span>Participaciones como conferencista y host</span></div>
+   <div><strong>+7.000</strong><span>Personas alcanzadas en eventos</span></div>
+   <div><strong class="founder-stat-words">Oferta · Contenido · Ventas</strong><span>Experiencia en construcción de negocios digitales</span></div>
+  </div>
+ </div>
+ <blockquote class="founder-mantra">“Si el éxito me cuesta mi esencia, <span>no es éxito.</span>”</blockquote>
+</section>
 <section class="section faq"><div class="eyebrow">Antes de empezar</div><h2>Vamos a hacerlo simple.</h2><details><summary>¿Me sirve si todavía no he vendido?</summary><p>Sí. Hay una ruta para concretar tu oferta y empezar a contrastarla con posibles clientes. No necesitas tener una comunidad grande ni un negocio consolidado.</p></details><details><summary>¿Qué voy a recibir?</summary><p>Un documento en PDF con el área que conviene trabajar primero, las respuestas que explican esa recomendación, acciones para cada uno de los próximos 7 días, un ejercicio práctico y una métrica para revisar tu avance.</p></details><details><summary>¿Es una evaluación de mi personalidad?</summary><p>No. Revisamos decisiones y acciones de tu negocio. El resultado es orientativo: no diagnostica condiciones psicológicas ni garantiza ventas o ingresos.</p></details><details><summary>¿Tengo que comprar algo después?</summary><p>No. El diagnóstico y tu plan son gratuitos. Según tus respuestas, te recomendaremos contenido gratuito, una comunidad de implementación o una sesión estratégica gratuita con José.</p></details><div style="margin-top:30px"><button class="btn" data-start>Hacer el quiz y recibir mi plan <span class="arrow" aria-hidden="true">↗</span></button></div></section>
 </div>
 <section id="quiz" class="flow-shell" hidden aria-label="Diagnóstico de negocio"><div class="flow-top"><span id="step-label"></span><span>UN PASO A LA VEZ</span></div><div class="steps" aria-hidden="true"><div class="step"></div><div class="step"></div><div class="step"></div><div class="step"></div><div class="step"></div></div><form id="quiz-form" class="question-panel" novalidate><div class="eyebrow" id="block-label"></div><h1 id="question-title" tabindex="-1"></h1><p class="intro" id="question-intro"></p><div id="questions"></div><p id="quiz-error" class="error" role="alert"></p><div class="flow-actions"><button class="back" type="button" id="back">← Volver</button><button type="submit" class="btn" id="next">Continuar <span aria-hidden="true">→</span></button></div></form><p class="micro">Responde según tu situación real. Si no llevas una métrica, puedes decirlo.</p></section>
