@@ -33,3 +33,15 @@
 @media(max-width:680px){.reviews-section{padding-top:58px}.reviews-heading .eyebrow{font-size:10px;letter-spacing:.09em}.reviews-heading h2{font-size:34px}.reviews-grid{grid-template-columns:1fr;gap:22px}.review-card,.review-card:last-child{grid-column:auto;width:100%;border-radius:20px}.review-body{padding:24px 22px}.review-card h3{font-size:26px}.review-summary{font-size:16px}.review-topic{font-size:12px}.review-footer{font-size:12px}.reviews-cta{gap:18px;padding-top:24px}.reviews-cta .btn{width:100%;justify-content:space-between;gap:14px}}
 @media(prefers-reduced-motion:reduce){.review-play{transition:none}}
 @media print{.reviews-section{display:none!important}}
+
+/* Authentic video stills hosted with the site; no Drive request until playback. */
+.review-card[data-review-id="ivan"] .review-launch{--review-poster:url("testimonials/ivan.webp")}
+.review-card[data-review-id="andres"] .review-launch{--review-poster:url("testimonials/andres.webp")}
+.review-card[data-review-id="sara"] .review-launch{--review-poster:url("testimonials/sara.webp")}
+.review-launch{background-image:linear-gradient(180deg,#0005 0%,#0000 38%,#0002 58%,#000d 100%),var(--review-poster);background-size:cover;background-position:center;background-repeat:no-repeat}
+.review-launch:before,.review-launch:after{display:none}
+.review-video-index{top:14px;left:16px;padding:4px 9px;border-radius:99px;background:#07100dbd;color:#eef8f3;letter-spacing:.07em}
+.review-video-name{left:18px;bottom:41px;font-size:30px;font-weight:600;text-shadow:0 2px 12px #000a}
+.review-play-label{left:18px;bottom:19px;color:#e4f4ee;text-shadow:0 1px 5px #000}
+.review-play{width:54px;height:54px;top:auto;right:18px;bottom:20px;transform:none;background:#0b2c25ed;border-color:#88e5cc;box-shadow:0 5px 24px #0005}
+.review-launch:hover .review-play{transform:scale(1.08);background:#1d5d4d}
