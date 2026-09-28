@@ -1,0 +1,43 @@
+name: Validate approved diagnosis-first landing
+on:
+  push:
+    branches: [update/diagnosis-first-20260928]
+    paths: [.github/workflows/diagnosis-first.yml]
+permissions:
+  contents: write
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Apply approved copy and result hierarchy
+        run: python3 .github/diagnosis-first.py
+      - name: Run quiz and result regression tests
+        run: |
+          node tests/logic.cjs
+          node tests/outbox.cjs
+          node tests/qualification.cjs
+          node tests/reviews.cjs
+          node tests/thumbnails.cjs
+          node tests/diagnostico.cjs
+          git diff --check
+      - name: Install browser test tooling
+        run: |
+          python3 -m pip install --quiet playwright==1.57.0
+          python3 -m playwright install --with-deps chromium
+      - name: Exercise desktop and mobile flows without sending production leads
+        run: python3 .github/diagnosis-browser.py
+      - name: Save verified HTML on preparation branch only
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add index.html
+          git commit -m 'Apply approved diagnosis-first promise, problem cards and contextual route CTAs'
+          git push origin HEAD:update/diagnosis-first-20260928
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: diagnostic-first-checks
+          path: diagnostic-checks/
+          retention-days: 1
