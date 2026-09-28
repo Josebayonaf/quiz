@@ -32,8 +32,8 @@ async function create(p,canvasFactory){
  if(p.business){y=text(pg,'TU NEGOCIO',M,y,507,9,'#58796a','bold')+6;y=text(pg,p.business,M,y,507,11)+15;}
  rule(pg,y);y+=17;y=text(pg,'Tu prioridad: '+p.priority,M,y,507,20,'#0a2018','bold')+10;
  y=text(pg,p.title,M,y,507,14,'#203a31','bold')+8;y=text(pg,p.text,M,y,507,11)+12;
- y=text(pg,'Lo que nos cuentan tus respuestas',M,y,507,12,'#16846e','bold')+7;
- for(const r of p.reasons)y=text(pg,'• '+r.answer,M,y,507,11)+5;
+ y=text(pg,'Tu primer movimiento',M,y,507,12,'#16846e','bold')+7;
+ y=text(pg,p.days[0],M,y,507,11);
  finish(pg);
  pg=page(2,'Siete días para pasar a la acción');y=146;
  y=text(pg,'Un paso concreto cada día.',M,y,507,23,'#0a2018','bold')+17;
