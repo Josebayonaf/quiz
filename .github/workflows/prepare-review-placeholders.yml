@@ -1,0 +1,45 @@
+name: Prepare illustrative review section
+on:
+  push:
+    branches: ['update/review-placeholders-20260928']
+    paths: ['.github/reviews-section.html', '.github/workflows/prepare-review-placeholders.yml', 'assets/reviews.css', 'tests/reviews.cjs']
+permissions:
+  contents: write
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Apply minimal markup change
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import hashlib, re
+          p = Path('index.html')
+          raw = p.read_bytes()
+          assert hashlib.sha1(b'blob ' + str(len(raw)).encode() + b'\0' + raw).hexdigest() == '4705fc603f7fb2ac0a4eeba9c840c7d30209ff5a', 'Base changed; reconcile before writing'
+          before = raw.decode('utf-8')
+          fragment = Path('.github/reviews-section.html').read_text()
+          anchor = '<section class="section faq">'
+          assert before.count(anchor) == 1 and 'id="experiencias"' not in before
+          after = before.replace(anchor, fragment + anchor, 1).replace('</head>', '<link rel="stylesheet" href="assets/reviews.css">\n</head>', 1)
+          assert re.findall(r'<script\b[^>]*>[\s\S]*?</script>', before) == re.findall(r'<script\b[^>]*>[\s\S]*?</script>', after), 'Quiz scripts must remain identical'
+          p.write_text(after)
+          for name in ['index.html', 'assets/reviews.css']:
+              data = Path(name).read_bytes()
+              print(name, len(data), hashlib.sha1(b'blob ' + str(len(data)).encode() + b'\0' + data).hexdigest())
+          PY
+      - name: Run regressions
+        run: |
+          node tests/reviews.cjs
+          node tests/logic.cjs
+          node tests/outbox.cjs
+          node tests/qualification.cjs
+      - name: Commit tested page on working branch only
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add index.html
+          git commit -m 'Insert five explicitly illustrative text reviews without altering quiz logic'
+          git push origin HEAD:update/review-placeholders-20260928
