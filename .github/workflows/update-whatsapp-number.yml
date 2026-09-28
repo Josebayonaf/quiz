@@ -1,0 +1,40 @@
+name: Prepare requested WhatsApp number update
+on:
+  push:
+    branches: [update/whatsapp-3015306201-20260928]
+    paths: [.github/workflows/update-whatsapp-number.yml]
+permissions:
+  contents: write
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Replace only the requested WhatsApp destination
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path('index.html')
+          original = p.read_text(encoding='utf-8')
+          old = "whatsapp: 'https://wa.me/573183824316'"
+          new = "whatsapp: 'https://wa.me/573015306201'"
+          assert original.count(old) == 1, 'Expected exactly one current WhatsApp setting'
+          updated = original.replace(old, new)
+          assert updated.replace(new, old) == original
+          p.write_text(updated, encoding='utf-8')
+          PY
+      - name: Verify existing regression tests
+        run: |
+          node tests/logic.cjs
+          node tests/outbox.cjs
+          node tests/qualification.cjs
+          node tests/reviews.cjs
+          node tests/thumbnails.cjs
+          git diff --check
+      - name: Commit on preparation branch only
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add index.html
+          git commit -m 'Use the requested WhatsApp number +57 301 530 6201'
+          git push origin HEAD:update/whatsapp-3015306201-20260928
