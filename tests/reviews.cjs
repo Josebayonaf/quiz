@@ -16,7 +16,9 @@ for (const [index,[key,id]] of people.entries()) {
 }
 assert(!/ilustrativ|ficticio|Sección en preparación|Espacio para futuro video/.test(section));
 assert(!/<blockquote|aggregateRating|ratingValue|USD|COP|dólares|5K al mes/.test(section));
-assert(section.includes('no garantiza resultados similares'));
+assert(!section.includes('reviews-disclosure'));
+assert(!section.includes('Iván, Andrés y Sara comparten su experiencia'));
+assert(!section.includes('Cada experiencia es individual y no garantiza resultados similares'));
 assert(section.includes('data-start'));
 assert(html.indexOf('id="sobre-jose"') < html.indexOf('id="experiencias"'));
 assert(html.indexOf('id="experiencias"') < html.indexOf('<section class="section faq">'));
