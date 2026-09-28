@@ -1,0 +1,32 @@
+name: Remove mentorship price and simplify result explanation
+on:
+  push:
+    branches: [fix/result-conversation-first-20260928]
+    paths: [.github/workflows/fix-result-copy.yml]
+permissions:
+  contents: write
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Apply focused correction
+        run: python3 .github/fix-result-copy.py
+      - name: Verify the quiz, segmentation, testimonials and result copy
+        run: |
+          node tests/logic.cjs
+          node tests/outbox.cjs
+          node tests/qualification.cjs
+          node tests/reviews.cjs
+          node tests/thumbnails.cjs
+          node tests/diagnostico.cjs
+          node tests/result-copy.cjs
+          git diff --check
+      - name: Commit verified output on preparation branch only
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add index.html plan-pdf.js
+          git commit -m 'Remove mentorship fee from results and PDF; replace repeated answers with clear guidance'
+          git push origin HEAD:fix/result-conversation-first-20260928
